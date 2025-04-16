@@ -1,0 +1,109 @@
+version: '3'
+
+services:
+  backend: 
+    build: ./backend  
+
+    image: backend_express:latest  
+
+    container_name: backend  
+
+    command: npm run dev  
+
+    ports:
+      - "3333:3333"  
+    
+    env_file:
+      - ./backend/.env.prod
+
+    volumes:
+      - ./backend:/app  
+
+      - ./backend/src:/app/src  
+
+    depends_on:
+      - db  
+
+    networks:
+      - public-network  
+      - private-network
+
+  frontend:
+    build: ./frontend  
+
+    image: frontend_react:latest  
+
+    container_name: frontend
+
+    ports:
+      - "5173:5173"  
+
+    volumes:
+      - ./frontend:/app  
+
+      - ./frontend/src:/app/src  
+
+      - /app/node_modules  
+
+    depends_on:
+      - backend  
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    
+    env_file:
+      - ./frontend/.env.local
+
+    networks:
+      - public-network
+
+  db:
+    image: postgres:latest  
+
+    container_name: database  
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin 
+      POSTGRES_DB: todolist
+
+    ports:
+      - "5432:5432"  
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  
+
+    networks:
+      - private-network
+
+  prisma-studio:
+    image: node:latest
+
+    container_name: prismastudio 
+
+    working_dir: /app
+
+    volumes:
+      - ./backend:/app
+
+    command: npx prisma studio --port 5555 --browser none
+
+    ports:
+      - "5555:5555"
+
+    env_file:
+      - ./backend/.env.prod
+
+    networks:
+      - private-network
+
+    depends_on:
+      - db
+
+
+networks:
+  public-network:  
+  private-network:  
+
+volumes:
+  postgres_data: {}  
+
