@@ -18,7 +18,7 @@ services:
 
     volumes:
       - ./backend:/app  
-
+      - /app/node_modules  
       - ./backend/src:/app/src  
 
     depends_on:
@@ -40,10 +40,8 @@ services:
 
     volumes:
       - ./frontend:/app  
-
-      - ./frontend/src:/app/src  
-
       - /app/node_modules  
+      - ./frontend/src:/app/src  
 
     depends_on:
       - backend  
