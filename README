@@ -1,2 +1,10 @@
 ** INSTRUÇÕES PARA RODAR O PROJETO **
 
+1. Possuir, em sua máquina, instalados o Docker e o Docker Compose
+
+2. No terminal, na pasta do projeto, onde contém as pastas frontend e backend, rodar o comando docker-compose up --build -d
+
+3. Navegar em http://localhost:5173/ para ter acesso ao frontend
+
+4. Navegar para http://localhost:5555/ para ter acesso ao banco de dados
+
